@@ -114,10 +114,6 @@
       font-weight: bold;
     }
 
-    a.download-link:hover {
-      text-decoration: underline;
-    }
-
     footer {
       text-align: center;
       padding: 15px;
@@ -141,7 +137,9 @@
     <a href="/{{ tenant }}/products">View Products</a>
     <a href="/{{ tenant }}/record-sale">Record Sale</a>
     <a href="/{{ tenant }}/sales-history">Sales History</a>
-    <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a> <!-- ✅ Added -->
+    <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
+    <a href="/change-password">Change Password</a>
+    <a href="/logout">Logout</a>
   </div>
 </div>
 
@@ -151,7 +149,9 @@
   <a href="/{{ tenant }}/products">View Products</a>
   <a href="/{{ tenant }}/record-sale">Record Sale</a>
   <a href="/{{ tenant }}/sales-history">Sales History</a>
-  <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a> <!-- ✅ Added -->
+  <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
+  <a href="/change-password">Change Password</a>
+  <a href="/logout">Logout</a>
 </div>
 
 <div class="container">
@@ -175,11 +175,7 @@
         <td>{{ '{:,.2f}'.format(sale['total_amount']) }}</td>
         <td>{{ '{:,.2f}'.format(sale['vat']) }}</td>
         <td>{{ '{:,.2f}'.format(sale['grand_total']) }}</td>
-        <td>
-          <a class="download-link" href="{{ url_for('download_invoice', tenant=tenant, sale_id=sale['id']) }}">
-            Download
-          </a>
-        </td>
+        <td><a class="download-link" href="{{ url_for('download_invoice', tenant=tenant, sale_id=sale['id']) }}">Download</a></td>
       </tr>
       {% endfor %}
     </tbody>

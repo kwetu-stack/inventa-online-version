@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Record Sale - {{ tenant | capitalize }}</title>
+  <title>Record Sale - {{ tenant | capitalize }} | Inventa™</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -146,78 +146,79 @@
 </head>
 <body>
 
-<div class="navbar">
-  <div><strong>Inventa™</strong></div>
-  <div class="nav-toggle" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <div class="navbar">
+    <div><strong>Inventa™</strong></div>
+    <div class="nav-toggle" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-links">
+      <a href="/{{ tenant }}/dashboard">Dashboard</a>
+      <a href="/{{ tenant }}/add-stock">Add Stock</a>
+      <a href="/{{ tenant }}/products">View Products</a>
+      <a href="/{{ tenant }}/record-sale">Record Sale</a>
+      <a href="/{{ tenant }}/sales-history">Sales History</a>
+      <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
+      <a href="/change-password">Change Password</a>
+      <a href="/logout">Logout</a>
+    </div>
   </div>
-  <div class="nav-links">
+
+  <div id="mobileNav" class="nav-mobile">
     <a href="/{{ tenant }}/dashboard">Dashboard</a>
     <a href="/{{ tenant }}/add-stock">Add Stock</a>
     <a href="/{{ tenant }}/products">View Products</a>
     <a href="/{{ tenant }}/record-sale">Record Sale</a>
     <a href="/{{ tenant }}/sales-history">Sales History</a>
-    <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a> <!-- ✅ Added -->
+    <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
+    <a href="/change-password">Change Password</a>
+    <a href="/logout">Logout</a>
   </div>
-</div>
 
-<div id="mobileNav" class="nav-mobile">
-  <a href="/{{ tenant }}/dashboard">Dashboard</a>
-  <a href="/{{ tenant }}/add-stock">Add Stock</a>
-  <a href="/{{ tenant }}/products">View Products</a>
-  <a href="/{{ tenant }}/record-sale">Record Sale</a>
-  <a href="/{{ tenant }}/sales-history">Sales History</a>
-  <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a> <!-- ✅ Added -->
-</div>
+  <div class="container">
+    <h2>Record New Sale</h2>
+    <form method="POST">
+      <label for="customer">Customer Name:</label>
+      <input type="text" id="customer" name="customer" required>
 
-<div class="container">
-  <h2>Record New Sale</h2>
-  <form method="POST">
-    <label for="customer">Customer Name:</label>
-    <input type="text" id="customer" name="customer" required>
+      <div id="product-rows">
+        <div class="item-row">
+          <select name="product_id[]" required>
+            {% for product in products %}
+              <option value="{{ product['id'] }}">{{ product['name'] }} (KES {{ product['price'] }})</option>
+            {% endfor %}
+          </select>
+          <input type="number" name="quantity[]" min="1" placeholder="Qty" required>
+        </div>
+      </div>
 
-    <div id="product-rows">
-      <div class="item-row">
+      <button type="button" onclick="addProductRow()">+ Add Product</button>
+      <button type="submit">Record Sale</button>
+    </form>
+  </div>
+
+  <footer>
+    Powered by Kwetu Partners Ltd
+  </footer>
+
+  <script>
+    function toggleNav() {
+      document.getElementById('mobileNav').classList.toggle('show');
+    }
+
+    function addProductRow() {
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.innerHTML = `
         <select name="product_id[]" required>
           {% for product in products %}
             <option value="{{ product['id'] }}">{{ product['name'] }} (KES {{ product['price'] }})</option>
           {% endfor %}
         </select>
         <input type="number" name="quantity[]" min="1" placeholder="Qty" required>
-      </div>
-    </div>
-
-    <button type="button" onclick="addProductRow()">+ Add Product</button>
-    <button type="submit">Record Sale</button>
-  </form>
-</div>
-
-<footer>
-  Powered by Kwetu Partners Ltd
-</footer>
-
-<script>
-  function toggleNav() {
-    document.getElementById('mobileNav').classList.toggle('show');
-  }
-
-  function addProductRow() {
-    const row = document.createElement('div');
-    row.className = 'item-row';
-
-    row.innerHTML = `
-      <select name="product_id[]" required>
-        {% for product in products %}
-          <option value="{{ product['id'] }}">{{ product['name'] }} (KES {{ product['price'] }})</option>
-        {% endfor %}
-      </select>
-      <input type="number" name="quantity[]" min="1" placeholder="Qty" required>
-      <button type="button" class="remove-btn" onclick="this.parentNode.remove()">Remove</button>
-    `;
-
-    document.getElementById('product-rows').appendChild(row);
-  }
-</script>
-
+        <button type="button" class="remove-btn" onclick="this.parentNode.remove()">Remove</button>
+      `;
+      document.getElementById('product-rows').appendChild(row);
+    }
+  </script>
 </body>
 </html>

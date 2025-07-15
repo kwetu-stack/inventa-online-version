@@ -7,8 +7,8 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
       margin: 0;
+      background: #f4f4f4;
     }
 
     .navbar {
@@ -64,9 +64,11 @@
       .nav-links {
         display: none;
       }
+
       .nav-toggle {
         display: flex;
       }
+
       .nav-mobile.show {
         display: flex;
       }
@@ -74,56 +76,49 @@
 
     .container {
       max-width: 600px;
-      margin: 40px auto;
       background: white;
+      margin: 30px auto;
       padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.1);
-      text-align: center;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
 
     h2 {
+      text-align: center;
       color: #003366;
       margin-bottom: 20px;
     }
 
-    .message {
-      background: #d4edda;
-      color: #155724;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #c3e6cb;
-      margin-bottom: 15px;
+    form {
+      margin-bottom: 25px;
     }
 
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #f5c6cb;
-      margin-bottom: 15px;
-    }
-
-    a.download-btn, button {
-      display: inline-block;
-      padding: 12px 18px;
-      background: #003366;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      margin-top: 10px;
+    label {
+      display: block;
       font-weight: bold;
-      cursor: pointer;
-      border: none;
-    }
-
-    a.download-btn:hover, button:hover {
-      background: #002244;
+      margin-bottom: 5px;
     }
 
     input[type="file"] {
-      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #003366;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 6px;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #002244;
     }
 
     footer {
@@ -150,6 +145,8 @@
     <a href="/{{ tenant }}/record-sale">Record Sale</a>
     <a href="/{{ tenant }}/sales-history">Sales History</a>
     <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
+    <a href="/change-password">Change Password</a>
+    <a href="/logout">Logout</a>
   </div>
 </div>
 
@@ -160,27 +157,21 @@
   <a href="/{{ tenant }}/record-sale">Record Sale</a>
   <a href="/{{ tenant }}/sales-history">Sales History</a>
   <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
+  <a href="/change-password">Change Password</a>
+  <a href="/logout">Logout</a>
 </div>
 
 <div class="container">
   <h2>Inventory Tools</h2>
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <div class="message">
-        {% for message in messages %}
-          {{ message }}
-        {% endfor %}
-      </div>
-    {% endif %}
-  {% endwith %}
+  <form method="GET" action="/{{ tenant }}/download-inventory">
+    <button type="submit">Download Current Stock (Excel)</button>
+  </form>
 
-  <a href="/{{ tenant }}/download-template" class="download-btn">⬇ Download Template</a>
-
-  <form method="POST" enctype="multipart/form-data">
-    <h3 style="color:#003366; margin-top:25px;">Upload Updated Stock</h3>
-    <input type="file" name="excel" accept=".xlsx" required>
-    <button type="submit">📤 Upload Stock</button>
+  <form method="POST" action="/{{ tenant }}/upload-inventory" enctype="multipart/form-data">
+    <label for="file">Upload Updated Inventory File:</label>
+    <input type="file" name="file" id="file" accept=".xlsx" required>
+    <button type="submit">Upload</button>
   </form>
 </div>
 
