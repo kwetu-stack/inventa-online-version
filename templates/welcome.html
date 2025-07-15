@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Inventa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background-color: #003366;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      color: white;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 8px 12px;
+      font-weight: bold;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      background: white;
+      height: 3px;
+      margin: 4px 0;
+      width: 25px;
+    }
+
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      background: #003366;
+      padding: 10px;
+    }
+
+    .nav-mobile a {
+      margin: 10px 0;
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .nav-mobile.show {
+        display: flex;
+      }
+    }
+
+    .card {
+      background: white;
+      padding: 40px 20px;
+      max-width: 600px;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #003366;
+    }
+
+    p {
+      margin-top: 10px;
+      color: #333;
+    }
+
+    a.start-btn {
+      display: inline-block;
+      margin-top: 20px;
+      background: #003366;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div><strong>Inventa™</strong></div>
+  <div class="nav-toggle" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="nav-links">
+    <a href="/{{ tenant }}/dashboard">Dashboard</a>
+    <a href="/{{ tenant }}/add-stock">Add Stock</a>
+    <a href="/{{ tenant }}/products">View Products</a>
+    <a href="/{{ tenant }}/record-sale">Record Sale</a>
+    <a href="/{{ tenant }}/sales-history">Sales History</a>
+  </div>
+</div>
+
+<div id="mobileNav" class="nav-mobile">
+  <a href="/{{ tenant }}/dashboard">Dashboard</a>
+  <a href="/{{ tenant }}/add-stock">Add Stock</a>
+  <a href="/{{ tenant }}/products">View Products</a>
+  <a href="/{{ tenant }}/record-sale">Record Sale</a>
+  <a href="/{{ tenant }}/sales-history">Sales History</a>
+</div>
+
+<div class="card">
+  <h1>Welcome, {{ tenant | capitalize }} 👋</h1>
+  <p>Let's get you set up on Inventa™.</p>
+  <p>Follow the checklist to start managing your stock and sales:</p>
+  <a class="start-btn" href="/{{ tenant }}/setup-checklist">Start Setup</a>
+</div>
+
+<script>
+  function toggleNav() {
+    document.getElementById('mobileNav').classList.toggle('show');
+  }
+</script>
+
+</body>
+</html>

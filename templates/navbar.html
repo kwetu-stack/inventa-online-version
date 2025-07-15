@@ -1,0 +1,92 @@
+<style>
+  .navbar {
+    background-color: #003366;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    color: white;
+  }
+
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 8px 12px;
+    font-weight: bold;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+
+  .nav-toggle span {
+    background: white;
+    height: 3px;
+    margin: 4px 0;
+    width: 25px;
+  }
+
+  .nav-mobile {
+    display: none;
+    flex-direction: column;
+    background: #003366;
+    padding: 10px;
+  }
+
+  .nav-mobile a {
+    margin: 10px 0;
+  }
+
+  @media (max-width: 600px) {
+    .nav-links {
+      display: none;
+    }
+
+    .nav-toggle {
+      display: flex;
+    }
+
+    .nav-mobile.show {
+      display: flex;
+    }
+  }
+</style>
+
+<div class="navbar">
+  <div><strong>Inventa™</strong></div>
+
+  <div class="nav-toggle" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="nav-links">
+    <a href="/{{ tenant }}/dashboard">Dashboard</a>
+    <a href="/{{ tenant }}/add-stock">Add Stock</a>
+    <a href="/{{ tenant }}/products">View Products</a>
+    <a href="/{{ tenant }}/record-sale">Record Sale</a>
+    <a href="/{{ tenant }}/sales-history">Sales History</a>
+  </div>
+</div>
+
+<div id="mobileNav" class="nav-mobile">
+  <a href="/{{ tenant }}/dashboard">Dashboard</a>
+  <a href="/{{ tenant }}/add-stock">Add Stock</a>
+  <a href="/{{ tenant }}/products">View Products</a>
+  <a href="/{{ tenant }}/record-sale">Record Sale</a>
+  <a href="/{{ tenant }}/sales-history">Sales History</a>
+</div>
+
+<script>
+  function toggleNav() {
+    const nav = document.getElementById('mobileNav');
+    nav.classList.toggle('show');
+  }
+</script>

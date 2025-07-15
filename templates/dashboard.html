@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ tenant | capitalize }} Dashboard - Inventa</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+    }
+
+    .navbar {
+      background-color: #003366;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      color: white;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 8px 12px;
+      font-weight: bold;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      background: white;
+      height: 3px;
+      margin: 4px 0;
+      width: 25px;
+    }
+
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      background: #003366;
+      padding: 10px;
+    }
+
+    .nav-mobile a {
+      margin: 10px 0;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .nav-mobile.show {
+        display: flex;
+      }
+    }
+
+    h1 {
+      color: #003366;
+      text-align: center;
+      margin: 30px 20px 10px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 20px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      text-align: center;
+      min-width: 200px;
+    }
+
+    .card h2 {
+      color: #003366;
+      margin-bottom: 10px;
+    }
+
+    canvas {
+      display: block;
+      max-width: 90%;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.08);
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #eee;
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div><strong>Inventa™</strong></div>
+    <div class="nav-toggle" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-links">
+      <a href="/{{ tenant }}/dashboard">Dashboard</a>
+      <a href="/{{ tenant }}/add-stock">Add Stock</a>
+      <a href="/{{ tenant }}/products">View Products</a>
+      <a href="/{{ tenant }}/record-sale">Record Sale</a>
+      <a href="/{{ tenant }}/sales-history">Sales History</a>
+      <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a> <!-- ✅ Added -->
+    </div>
+  </div>
+
+  <div id="mobileNav" class="nav-mobile">
+    <a href="/{{ tenant }}/dashboard">Dashboard</a>
+    <a href="/{{ tenant }}/add-stock">Add Stock</a>
+    <a href="/{{ tenant }}/products">View Products</a>
+    <a href="/{{ tenant }}/record-sale">Record Sale</a>
+    <a href="/{{ tenant }}/sales-history">Sales History</a>
+    <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a> <!-- ✅ Added -->
+  </div>
+
+  <h1>{{ tenant | capitalize }} Dashboard</h1>
+  <div class="stats">
+    <div class="card">
+      <h2>Total Products:</h2>
+      <p>{{ total_products }}</p>
+    </div>
+    <div class="card">
+      <h2>Total Sales (KES):</h2>
+      <p>{{ total_sales }}</p>
+    </div>
+  </div>
+
+  <canvas id="salesChart"></canvas>
+
+  <footer>
+    Powered by Kwetu Partners Ltd
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function toggleNav() {
+      document.getElementById('mobileNav').classList.toggle('show');
+    }
+
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: {{ dates|tojson }},
+        datasets: [{
+          label: 'Sales Over Time',
+          data: {{ totals|tojson }},
+          borderWidth: 2,
+          fill: false,
+          borderColor: '#003366',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

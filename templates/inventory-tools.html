@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inventory Tools - {{ tenant | capitalize }} | Inventa™</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+    }
+
+    .navbar {
+      background-color: #003366;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      color: white;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 8px 12px;
+      font-weight: bold;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      background: white;
+      height: 3px;
+      margin: 4px 0;
+      width: 25px;
+    }
+
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      background: #003366;
+      padding: 10px;
+    }
+
+    .nav-mobile a {
+      margin: 10px 0;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+      .nav-toggle {
+        display: flex;
+      }
+      .nav-mobile.show {
+        display: flex;
+      }
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      color: #003366;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      background: #d4edda;
+      color: #155724;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #c3e6cb;
+      margin-bottom: 15px;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #f5c6cb;
+      margin-bottom: 15px;
+    }
+
+    a.download-btn, button {
+      display: inline-block;
+      padding: 12px 18px;
+      background: #003366;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    a.download-btn:hover, button:hover {
+      background: #002244;
+    }
+
+    input[type="file"] {
+      margin-top: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #eee;
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div><strong>Inventa™</strong></div>
+  <div class="nav-toggle" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="nav-links">
+    <a href="/{{ tenant }}/dashboard">Dashboard</a>
+    <a href="/{{ tenant }}/add-stock">Add Stock</a>
+    <a href="/{{ tenant }}/products">View Products</a>
+    <a href="/{{ tenant }}/record-sale">Record Sale</a>
+    <a href="/{{ tenant }}/sales-history">Sales History</a>
+    <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
+  </div>
+</div>
+
+<div id="mobileNav" class="nav-mobile">
+  <a href="/{{ tenant }}/dashboard">Dashboard</a>
+  <a href="/{{ tenant }}/add-stock">Add Stock</a>
+  <a href="/{{ tenant }}/products">View Products</a>
+  <a href="/{{ tenant }}/record-sale">Record Sale</a>
+  <a href="/{{ tenant }}/sales-history">Sales History</a>
+  <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
+</div>
+
+<div class="container">
+  <h2>Inventory Tools</h2>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="message">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <a href="/{{ tenant }}/download-template" class="download-btn">⬇ Download Template</a>
+
+  <form method="POST" enctype="multipart/form-data">
+    <h3 style="color:#003366; margin-top:25px;">Upload Updated Stock</h3>
+    <input type="file" name="excel" accept=".xlsx" required>
+    <button type="submit">📤 Upload Stock</button>
+  </form>
+</div>
+
+<footer>
+  Powered by Kwetu Partners Ltd
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById('mobileNav').classList.toggle('show');
+  }
+</script>
+
+</body>
+</html>
