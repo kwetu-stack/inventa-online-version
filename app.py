@@ -4,12 +4,12 @@ import io
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 import qrcode
 
+# ---------- APP CONFIG ----------
 app = Flask(__name__)
-app.secret_key = 'supersecret'  # Required for sessions and flash messages
+app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # For Render, we can override via environment
 
 TENANT = 'digitalclub'
 DB_PATH = 'inventory.db'
-
 
 # ---------- HELPER ----------
 def get_db_connection():
@@ -17,13 +17,10 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-
 def is_logged_in():
     return 'user_id' in session
 
-
 # ---------- LOGIN & AUTH ----------
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -47,13 +44,11 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html', tenant=TENANT)
 
-
 @app.route('/logout')
 def logout():
     session.clear()
     flash("You have been logged out.", "info")
     return redirect(url_for('login'))
-
 
 @app.route(f'/{TENANT}/change-password', methods=['GET', 'POST'])
 def change_password():
@@ -78,12 +73,10 @@ def change_password():
             conn.close()
     return render_template('change-password.html', tenant=TENANT)
 
-
 # ---------- DASHBOARD ----------
 @app.route('/')
 def home():
     return redirect(f'/{TENANT}/dashboard')
-
 
 @app.route(f'/{TENANT}/dashboard')
 def dashboard():
@@ -107,7 +100,6 @@ def dashboard():
                            dates=dates,
                            totals=totals)
 
-
 # ---------- VIEW PRODUCTS ----------
 @app.route(f'/{TENANT}/products')
 def view_products():
@@ -118,7 +110,6 @@ def view_products():
     products = conn.execute('SELECT * FROM products').fetchall()
     conn.close()
     return render_template('view-products.html', products=products, tenant=TENANT)
-
 
 # ---------- ADD STOCK ----------
 @app.route(f'/{TENANT}/add-stock', methods=['GET', 'POST'])
@@ -140,7 +131,6 @@ def add_stock():
     products = conn.execute('SELECT id, name FROM products').fetchall()
     conn.close()
     return render_template('add-stock.html', products=products, tenant=TENANT)
-
 
 # ---------- RECORD SALE ----------
 @app.route(f'/{TENANT}/record-sale', methods=['GET', 'POST'])
@@ -190,7 +180,6 @@ def record_sale():
     conn.close()
     return render_template('record-sale.html', products=products, tenant=TENANT)
 
-
 # ---------- SALES HISTORY ----------
 @app.route(f'/{TENANT}/sales-history')
 def sales_history():
@@ -201,7 +190,6 @@ def sales_history():
     sales = conn.execute('SELECT * FROM sales ORDER BY date DESC').fetchall()
     conn.close()
     return render_template('sales-history.html', sales=sales, tenant=TENANT)
-
 
 # ---------- INVOICE ----------
 @app.route(f'/{TENANT}/invoice/<int:sale_id>')
@@ -220,7 +208,6 @@ def download_invoice(sale_id):
     conn.close()
     return render_template('invoice.html', sale=sale, items=items, tenant=TENANT)
 
-
 # ---------- QR ----------
 @app.route(f'/{TENANT}/qr/<int:sale_id>')
 def generate_qr(sale_id):
@@ -233,7 +220,6 @@ def generate_qr(sale_id):
     img_io.seek(0)
     return send_file(img_io, mimetype='image/png')
 
-
 # ---------- INVENTORY TOOLS ----------
 @app.route(f'/{TENANT}/inventory-tools')
 def inventory_tools():
@@ -241,17 +227,16 @@ def inventory_tools():
         return redirect(url_for('login'))
     return render_template('inventory-tools.html', tenant=TENANT)
 
-
 # ---------- ERROR HANDLERS ----------
 @app.errorhandler(403)
 def forbidden(e):
     return render_template("403.html"), 403
 
-
 @app.errorhandler(404)
 def not_found(e):
     return render_template("404.html"), 404
 
-
+# ---------- RENDER COMPATIBLE ENTRY POINT ----------
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
