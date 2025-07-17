@@ -1,13 +1,13 @@
 import os
 import sqlite3
 import io
+import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 import qrcode
 
 # ---------- APP CONFIG ----------
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # For Render, we can override via environment
-
+app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # For Render, override via environment
 TENANT = 'digitalclub'
 DB_PATH = 'inventory.db'
 
@@ -50,7 +50,7 @@ def logout():
     flash("You have been logged out.", "info")
     return redirect(url_for('login'))
 
-@app.route(f'/{TENANT}/change-password', methods=['GET', 'POST'])
+@app.route('/change-password', methods=['GET', 'POST'])
 def change_password():
     if not is_logged_in():
         return redirect(url_for('login'))
@@ -227,6 +227,29 @@ def inventory_tools():
         return redirect(url_for('login'))
     return render_template('inventory-tools.html', tenant=TENANT)
 
+# ---------- DOWNLOAD INVENTORY (NEW) ----------
+@app.route(f'/{TENANT}/download-inventory')
+def download_inventory():
+    if not is_logged_in():
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    products = conn.execute('SELECT id, name, quantity, price FROM products').fetchall()
+    conn.close()
+
+    df = pd.DataFrame(products, columns=['ID', 'Item', 'Stock', 'Selling Price (KES)'])
+
+    excel_file = io.BytesIO()
+    df.to_excel(excel_file, index=False, sheet_name='Inventory')
+    excel_file.seek(0)
+
+    return send_file(
+        excel_file,
+        as_attachment=True,
+        download_name=f"{TENANT}_inventory.xlsx",
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+
 # ---------- ERROR HANDLERS ----------
 @app.errorhandler(403)
 def forbidden(e):
@@ -236,7 +259,5 @@ def forbidden(e):
 def not_found(e):
     return render_template("404.html"), 404
 
-# ---------- RENDER COMPATIBLE ENTRY POINT ----------
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True)

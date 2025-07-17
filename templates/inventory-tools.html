@@ -1,189 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Inventory Tools - {{ tenant | capitalize }} | Inventa™</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f4f4f4;
-    }
-
-    .navbar {
-      background-color: #003366;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      color: white;
-    }
-
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      margin: 8px 12px;
-      font-weight: bold;
-    }
-
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-
-    .nav-toggle span {
-      background: white;
-      height: 3px;
-      margin: 4px 0;
-      width: 25px;
-    }
-
-    .nav-mobile {
-      display: none;
-      flex-direction: column;
-      background: #003366;
-      padding: 10px;
-    }
-
-    .nav-mobile a {
-      margin: 10px 0;
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    @media (max-width: 600px) {
-      .nav-links {
-        display: none;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .nav-mobile.show {
-        display: flex;
-      }
-    }
-
-    .container {
-      max-width: 600px;
-      background: white;
-      margin: 30px auto;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      text-align: center;
-      color: #003366;
-      margin-bottom: 20px;
-    }
-
-    form {
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    input[type="file"] {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-
-    button {
-      background-color: #003366;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      border-radius: 6px;
-      width: 100%;
-    }
-
-    button:hover {
-      background: #002244;
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px;
-      background: #eee;
-      font-size: 0.9em;
-      color: #555;
-      margin-top: 30px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Tools | Inventa™</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f7f9fb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #003366;
+            margin-bottom: 20px;
+        }
+        .tool-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            text-align: center;
+            background-color: #003366;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0055aa;
+        }
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 30px;
+        }
+    </style>
 </head>
 <body>
+    {% include 'navbar.html' %}
 
-<div class="navbar">
-  <div><strong>Inventa™</strong></div>
-  <div class="nav-toggle" onclick="toggleNav()">
-    <span></span><span></span><span></span>
-  </div>
-  <div class="nav-links">
-    <a href="/{{ tenant }}/dashboard">Dashboard</a>
-    <a href="/{{ tenant }}/add-stock">Add Stock</a>
-    <a href="/{{ tenant }}/products">View Products</a>
-    <a href="/{{ tenant }}/record-sale">Record Sale</a>
-    <a href="/{{ tenant }}/sales-history">Sales History</a>
-    <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
-    <a href="/change-password">Change Password</a>
-    <a href="/logout">Logout</a>
-  </div>
-</div>
+    <div class="container">
+        <h2>Inventory Tools</h2>
+        <div class="tool-buttons">
+            <a href="/{{ tenant }}/download-inventory" class="btn">⬇️ Download Current Inventory (Excel)</a>
+            <p style="font-size:14px; color:#555; text-align:center;">
+                Use this tool to download the latest inventory for backup or external review.
+            </p>
+        </div>
+    </div>
 
-<div id="mobileNav" class="nav-mobile">
-  <a href="/{{ tenant }}/dashboard">Dashboard</a>
-  <a href="/{{ tenant }}/add-stock">Add Stock</a>
-  <a href="/{{ tenant }}/products">View Products</a>
-  <a href="/{{ tenant }}/record-sale">Record Sale</a>
-  <a href="/{{ tenant }}/sales-history">Sales History</a>
-  <a href="/{{ tenant }}/inventory-tools">Inventory Tools</a>
-  <a href="/change-password">Change Password</a>
-  <a href="/logout">Logout</a>
-</div>
-
-<div class="container">
-  <h2>Inventory Tools</h2>
-
-  <form method="GET" action="/{{ tenant }}/download-inventory">
-    <button type="submit">Download Current Stock (Excel)</button>
-  </form>
-
-  <form method="POST" action="/{{ tenant }}/upload-inventory" enctype="multipart/form-data">
-    <label for="file">Upload Updated Inventory File:</label>
-    <input type="file" name="file" id="file" accept=".xlsx" required>
-    <button type="submit">Upload</button>
-  </form>
-</div>
-
-<footer>
-  Powered by Kwetu Partners Ltd
-</footer>
-
-<script>
-  function toggleNav() {
-    document.getElementById('mobileNav').classList.toggle('show');
-  }
-</script>
-
+    <div class="footer">
+        Powered by Kwetu Partners Ltd
+    </div>
 </body>
 </html>
