@@ -1,23 +1,44 @@
 import sqlite3
-import pandas as pd
+from openpyxl import Workbook
+import os
 
 DB_PATH = "inventory.db"
+BACKUP_FOLDER = "backups"
 
-# Connect to DB
-conn = sqlite3.connect(DB_PATH)
+def export_table_to_excel(table_name):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
 
-# Export Products
-products = pd.read_sql_query("SELECT * FROM products", conn)
-products.to_excel("digitalclub_products_backup.xlsx", index=False)
+    cursor.execute(f"SELECT * FROM {table_name}")
+    rows = cursor.fetchall()
+    columns = [description[0] for description in cursor.description]
 
-# Export Sales
-sales = pd.read_sql_query("SELECT * FROM sales", conn)
-sales.to_excel("digitalclub_sales_backup.xlsx", index=False)
+    # Create a workbook
+    wb = Workbook()
+    ws = wb.active
+    ws.title = table_name
 
-# Export Sale Items (optional)
-sale_items = pd.read_sql_query("SELECT * FROM sale_items", conn)
-sale_items.to_excel("digitalclub_sale_items_backup.xlsx", index=False)
+    # Write column headers
+    ws.append(columns)
 
-conn.close()
+    # Write data rows
+    for row in rows:
+        ws.append(row)
 
-print("✅ Backup complete: Excel files created!")
+    # Ensure backup folder exists
+    if not os.path.exists(BACKUP_FOLDER):
+        os.makedirs(BACKUP_FOLDER)
+
+    file_path = os.path.join(BACKUP_FOLDER, f"{table_name}_backup.xlsx")
+    wb.save(file_path)
+    conn.close()
+
+    print(f"✅ Backup complete for {table_name}: {file_path}")
+
+def backup_all():
+    tables = ["products", "sales", "users"]  # Adjust table names as needed
+    for table in tables:
+        export_table_to_excel(table)
+
+if __name__ == "__main__":
+    backup_all()
