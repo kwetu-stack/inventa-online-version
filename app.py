@@ -3,11 +3,11 @@ import sqlite3
 import io
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 import qrcode
-from openpyxl import load_workbook, Workbook
+from openpyxl import Workbook
 
 # ---------- APP CONFIG ----------
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # For Render, override via environment
+app.secret_key = os.environ.get("SECRET_KEY", "supersecret")  # For Render
 TENANT = 'digitalclub'
 DB_PATH = 'inventory.db'
 
@@ -87,7 +87,9 @@ def dashboard():
     products = conn.execute('SELECT * FROM products').fetchall()
     total_products = len(products)
     total_sales = conn.execute('SELECT SUM(grand_total) FROM sales').fetchone()[0] or 0
-    sales_data = conn.execute('SELECT date, SUM(grand_total) as total FROM sales GROUP BY date ORDER BY date').fetchall()
+    sales_data = conn.execute(
+        'SELECT date, SUM(grand_total) as total FROM sales GROUP BY date ORDER BY date'
+    ).fetchall()
     conn.close()
 
     dates = [row['date'] for row in sales_data]
@@ -237,11 +239,12 @@ def download_inventory():
     products = conn.execute('SELECT id, name, quantity, buying_price, price FROM products').fetchall()
     conn.close()
 
+    # Export using openpyxl
     wb = Workbook()
     ws = wb.active
     ws.title = "Inventory"
-    ws.append(["ID", "Item", "Stock", "Buying Price (KES)", "Selling Price (KES)"])
 
+    ws.append(["ID", "Item", "Stock", "Buying Price (KES)", "Selling Price (KES)"])
     for p in products:
         ws.append([p["id"], p["name"], p["quantity"], p["buying_price"], p["price"]])
 
@@ -255,38 +258,6 @@ def download_inventory():
         download_name=f"{TENANT}_inventory.xlsx",
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
-
-# ---------- UPLOAD INVENTORY ----------
-@app.route(f'/{TENANT}/upload-inventory', methods=['POST'])
-def upload_inventory():
-    if not is_logged_in():
-        return redirect(url_for('login'))
-
-    if 'file' not in request.files or request.files['file'].filename == '':
-        flash("Please select a valid Excel file.", "error")
-        return redirect(f'/{TENANT}/inventory-tools')
-
-    file = request.files['file']
-    wb = load_workbook(file)
-    ws = wb.active
-
-    conn = get_db_connection()
-    updated_rows = 0
-
-    for row in ws.iter_rows(min_row=2, values_only=True):
-        product_id, name, quantity, buying_price, selling_price = row
-        conn.execute('''
-            UPDATE products
-            SET name = ?, quantity = ?, buying_price = ?, price = ?
-            WHERE id = ?
-        ''', (name, quantity, buying_price, selling_price, product_id))
-        updated_rows += 1
-
-    conn.commit()
-    conn.close()
-
-    flash(f"✅ Inventory updated successfully ({updated_rows} products).", "info")
-    return redirect(f'/{TENANT}/inventory-tools')
 
 # ---------- ERROR HANDLERS ----------
 @app.errorhandler(403)
