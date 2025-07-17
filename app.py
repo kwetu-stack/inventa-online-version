@@ -1,8 +1,8 @@
 import os
 import sqlite3
 import io
-import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
+from openpyxl import Workbook
 import qrcode
 
 # ---------- APP CONFIG ----------
@@ -227,7 +227,7 @@ def inventory_tools():
         return redirect(url_for('login'))
     return render_template('inventory-tools.html', tenant=TENANT)
 
-# ---------- DOWNLOAD INVENTORY (NEW) ----------
+# ---------- DOWNLOAD INVENTORY (UPDATED TO OPENPYXL) ----------
 @app.route(f'/{TENANT}/download-inventory')
 def download_inventory():
     if not is_logged_in():
@@ -237,10 +237,17 @@ def download_inventory():
     products = conn.execute('SELECT id, name, quantity, price FROM products').fetchall()
     conn.close()
 
-    df = pd.DataFrame(products, columns=['ID', 'Item', 'Stock', 'Selling Price (KES)'])
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Inventory"
+
+    ws.append(["ID", "Item", "Stock", "Selling Price (KES)"])
+
+    for product in products:
+        ws.append([product['id'], product['name'], product['quantity'], product['price']])
 
     excel_file = io.BytesIO()
-    df.to_excel(excel_file, index=False, sheet_name='Inventory')
+    wb.save(excel_file)
     excel_file.seek(0)
 
     return send_file(
