@@ -1,83 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventory Tools | Inventa™</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f7f9fb;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    h2 {
-      color: #003366;
-      margin-bottom: 20px;
-    }
-    .btn {
-      display: inline-block;
-      background: #003366;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      margin: 10px 0;
-      transition: background 0.3s;
-    }
-    .btn:hover {
-      background: #0055aa;
-    }
-    input[type="file"] {
-      margin-top: 15px;
-      margin-bottom: 15px;
-      display: block;
-      width: 100%;
-    }
-    .upload-form {
-      margin-top: 20px;
-      border-top: 1px solid #ddd;
-      padding-top: 15px;
-    }
-    .back-link {
-      display: inline-block;
-      margin-top: 15px;
-      color: #003366;
-      text-decoration: none;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Tools | Inventa™</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 22px;
+            color: #333;
+            text-align: center;
+        }
+        .tool-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .file-input {
+            margin: 10px 0;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .flash {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .flash.info {
+            background: #e7f3fe;
+            color: #3178c6;
+            border: 1px solid #b3d7ff;
+        }
+        .flash.error {
+            background: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+    </style>
 </head>
 <body>
-  {% include 'navbar.html' %}
-  <div class="container">
-    <h2>Inventory Tools</h2>
+    <div class="container">
+        <h1>Inventory Tools</h1>
 
-    <!-- Download Inventory -->
-    <a href="/{{ tenant }}/download-inventory" class="btn">⬇ Download Inventory</a>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-    <!-- Upload Inventory -->
-    <div class="upload-form">
-      <form action="/{{ tenant }}/upload-inventory" method="POST" enctype="multipart/form-data">
-        <label for="file"><strong>Upload Updated Inventory (.xlsx):</strong></label>
-        <input type="file" name="file" accept=".xlsx" required>
-        <button type="submit" class="btn">⬆ Upload & Update</button>
-      </form>
+        <div class="tool-section">
+            <a href="/{{ tenant }}/download-inventory" class="btn">⬇ Download Inventory (Excel)</a>
+        </div>
+
+        <div class="tool-section">
+            <form action="/{{ tenant }}/upload-inventory" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".xlsx" class="file-input" required>
+                <button type="submit" class="btn">⬆ Upload Updated Inventory</button>
+            </form>
+        </div>
+
+        <a href="/{{ tenant }}/dashboard" class="back-link">← Back to Dashboard</a>
     </div>
-
-    <a href="/{{ tenant }}/dashboard" class="back-link">← Back to Dashboard</a>
-  </div>
 </body>
 </html>
