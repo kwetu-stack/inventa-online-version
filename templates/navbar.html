@@ -1,20 +1,33 @@
 <style>
+  /* Kwetu dark navy topbar (self-contained for this file) */
+  :root{
+    --top-a:#0f172a; --top-b:#1e293b;
+    --accent:#38bdf8; --text:#E2E8F0; --border:#1f2937;
+  }
+
   .navbar {
-    background-color: #003366;
+    background: linear-gradient(90deg, var(--top-a), var(--top-b));
+    color: var(--text);
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    color: white;
+    border-bottom: 1px solid var(--border);
   }
+  .brand {
+    font-weight: 800;
+    letter-spacing: .3px;
+  }
+  .brand sup { font-size: .7em; color: var(--accent); }
 
   .navbar a {
-    color: white;
+    color: var(--text);
     text-decoration: none;
     margin: 8px 12px;
-    font-weight: bold;
+    font-weight: 700;
   }
+  .navbar a:hover { color: var(--accent); }
 
   .nav-links {
     display: flex;
@@ -25,43 +38,36 @@
     display: none;
     flex-direction: column;
     cursor: pointer;
+    gap: 4px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid transparent;
   }
-
+  .nav-toggle:hover { border-color: var(--border); }
   .nav-toggle span {
-    background: white;
+    background: var(--text);
     height: 3px;
-    margin: 4px 0;
     width: 25px;
   }
 
   .nav-mobile {
     display: none;
     flex-direction: column;
-    background: #003366;
-    padding: 10px;
+    background: linear-gradient(90deg, var(--top-a), var(--top-b));
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
   }
+  .nav-mobile a { margin: 10px 0; }
 
-  .nav-mobile a {
-    margin: 10px 0;
-  }
-
-  @media (max-width: 600px) {
-    .nav-links {
-      display: none;
-    }
-
-    .nav-toggle {
-      display: flex;
-    }
-
-    .nav-mobile.show {
-      display: flex;
-    }
+  @media (max-width: 700px) {
+    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+    .nav-mobile.show { display: flex; }
   }
 </style>
 
 <div class="navbar">
-  <div><strong>Inventa™</strong></div>
+  <div class="brand">Inventa<sup>™</sup></div>
 
   <div class="nav-toggle" onclick="toggleNav()">
     <span></span><span></span><span></span>

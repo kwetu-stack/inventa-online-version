@@ -4,116 +4,96 @@
   <meta charset="UTF-8">
   <title>View Products - {{ tenant | capitalize }} | Inventa™</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f4f4f4;
+    :root{
+      --top-a:#0f172a; --top-b:#1e293b;
+      --accent:#38bdf8;
+      --text:#E2E8F0; --muted:#94A3B8;
+      --surface:#0b1220; --surface2:#0f1b2d;
+      --border:#1f2937;
+      --radius:16px;
+      --shadow-soft:0 6px 20px rgba(0,0,0,.18);
     }
 
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue";
+      background: linear-gradient(180deg, var(--surface) 0%, var(--surface2) 100%);
+      color: var(--text);
+    }
+
+    /* Navbar */
     .navbar {
-      background-color: #003366;
+      background: linear-gradient(90deg, var(--top-a), var(--top-b));
       padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      color: white;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
     }
-
     .navbar a {
-      color: white;
+      color: var(--text);
       text-decoration: none;
       margin: 8px 12px;
-      font-weight: bold;
+      font-weight: 700;
     }
+    .navbar a:hover { color: var(--accent); }
 
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
+    .nav-links { display: flex; flex-wrap: wrap; }
     .nav-toggle {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
+      display: none; flex-direction: column; cursor: pointer; gap: 4px;
     }
-
-    .nav-toggle span {
-      background: white;
-      height: 3px;
-      margin: 4px 0;
-      width: 25px;
-    }
-
+    .nav-toggle span { background: var(--text); height:3px; width:25px; }
     .nav-mobile {
-      display: none;
-      flex-direction: column;
-      background: #003366;
-      padding: 10px;
+      display: none; flex-direction: column;
+      background: linear-gradient(90deg, var(--top-a), var(--top-b));
+      padding: 10px 20px; border-bottom: 1px solid var(--border);
     }
-
     .nav-mobile a {
-      margin: 10px 0;
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
+      margin: 10px 0; color: var(--text); font-weight: 700; text-decoration: none;
+    }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      .nav-mobile.show { display: flex; }
     }
 
-    @media (max-width: 600px) {
-      .nav-links {
-        display: none;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .nav-mobile.show {
-        display: flex;
-      }
-    }
-
-    .container {
-      padding: 20px;
-    }
-
+    /* Content */
+    .container { width: min(1180px, 92vw); margin: 0 auto; padding: 20px; }
     h2 {
       text-align: center;
-      color: #003366;
       margin-bottom: 20px;
+      font-weight: 800;
+      color: var(--text);
     }
 
     table {
       width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 8px;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-soft);
     }
-
-    th, td {
-      padding: 12px 15px;
-      border-bottom: 1px solid #eee;
-      text-align: left;
-    }
-
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border); }
     th {
-      background: #003366;
-      color: white;
+      background: #0d1a2b;
+      color: var(--muted);
+      font-weight: 700;
     }
-
-    tr:hover {
-      background: #f1f1f1;
-    }
+    tr:last-child td { border-bottom: 0; }
+    tr:hover td { background: #0d1a2b; }
 
     footer {
       text-align: center;
-      padding: 15px;
-      background: #eee;
-      font-size: 0.9em;
-      color: #555;
+      padding: 16px 0 22px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
       margin-top: 30px;
     }
   </style>
