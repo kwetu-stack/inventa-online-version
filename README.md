@@ -1,93 +1,135 @@
-Inventa™ Multi-Tenant Stable v1.0
-Overview
-Inventa™ is a lightweight multi-tenant inventory and sales management system designed for SMEs.
-This stable version (v1.0) is optimized for offline/standalone usage and serves as a backup reference for future online deployments.
+# Inventa™ — Multi-Tenant Inventory & Sales SaaS
 
-The system allows real-time inventory tracking, sales recording, invoice generation (PDF + QR Code), and bulk stock import via Excel.
+Inventa™ is a production-ready inventory and sales management system built to handle real-world business operations across multiple tenants.
 
-Features
-✅ Multi-Tenant Support (Tenant Name Hardcoded for Backup Version)
-✅ Dashboard: Sales charts, top-selling products, and stock overview
-✅ View Products: Full inventory list with stock levels
-✅ Add Stock: Update quantities instantly
-✅ Record Sales: Multi-item sales recording with VAT calculations
-✅ Sales History: Track all recorded sales with invoice downloads
-✅ Invoice Generation: Stylish invoice with QR code
-✅ Inventory Tools: Bulk upload stock data via Excel
-✅ Mobile-Responsive UI
-✅ Powered by Kwetu Partners Ltd
+Designed for SMEs, the platform enables efficient stock control, sales tracking, and invoice generation in a scalable, structured environment.
 
-Tech Stack
-Backend: Python (Flask)
+---
 
-Frontend: HTML, CSS (mobile responsive)
+## 🚀 Overview
 
-Database: SQLite (inventory.db)
+Inventa™ provides a complete workflow for managing inventory and sales operations:
 
-Libraries:
+* Real-time inventory tracking
+* Multi-item sales recording with VAT calculations
+* Automated invoice generation (PDF + QR Code)
+* Bulk stock management via Excel import
+* Multi-tenant architecture for business separation
 
-Flask
+This version represents a stable foundation for scalable SaaS deployment.
 
-Matplotlib
+---
 
-Qrcode
+## 🧠 Core Features
 
-Pdfkit (optional, for advanced invoice exports)
+* **Multi-Tenant Architecture** (supports multiple business environments)
+* **Dashboard Analytics** (sales trends, top products, stock overview)
+* **Inventory Management** (real-time stock visibility and updates)
+* **Sales Processing** (multi-item transactions with automatic calculations)
+* **Invoice System** (PDF invoices with embedded QR codes)
+* **Sales History Tracking** (full audit trail with downloadable invoices)
+* **Bulk Stock Upload** (Excel-based inventory updates)
+* **Mobile-Responsive Interface**
+* **Production-Oriented Design**
 
-Installation
-1. Clone the Repository
-bash
-Copy
-Edit
-git clone https://github.com/kwetu-stack/inventa-multitenant-stable.git
-cd inventa-multitenant-stable
-2. Create & Activate Virtual Environment (Windows)
-bash
-Copy
-Edit
+---
+
+## 🛠️ Tech Stack
+
+**Backend**
+
+* Python (Flask)
+
+**Frontend**
+
+* HTML, CSS (responsive UI)
+
+**Database**
+
+* SQLite (local development)
+
+**Libraries**
+
+* Flask
+* Matplotlib (analytics visualization)
+* QRCode (invoice encoding)
+* pdfkit (advanced PDF generation)
+
+---
+
+## ⚙️ Installation
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/kwetu-stack/inventa-online-version.git
+cd inventa-online-version
+```
+
+### 2. Create Virtual Environment (Windows)
+
+```bash
 python -m venv venv
 venv\Scripts\activate
-(Mac/Linux users: source venv/bin/activate)
+```
 
-3. Install Requirements
-bash
-Copy
-Edit
-pip install flask qrcode matplotlib pandas
-4. Run the App
-bash
-Copy
-Edit
+*(Mac/Linux: `source venv/bin/activate`)*
+
+### 3. Install Requirements
+
+```bash
+pip install flask qrcode matplotlib pandas pdfkit
+```
+
+### 4. Run Application
+
+```bash
 python app.py
-5. Access in Browser
-cpp
-Copy
-Edit
+```
+
+### 5. Access System
+
+```
 http://127.0.0.1:5000
-Usage
-Dashboard – View sales stats and stock overview.
+```
 
-Inventory Tools – Download sample Excel, update stock, and re-upload.
+---
 
-Add Stock – Manually increase stock quantities.
+## 💼 Usage
 
-Record Sales – Record transactions and auto-generate invoices.
+* **Dashboard** → Monitor sales performance and stock levels
+* **Inventory Tools** → Import/export stock using Excel
+* **Add Stock** → Update inventory quantities
+* **Record Sales** → Process transactions and generate invoices
+* **Sales History** → Track and download past invoices
 
-Sales History – Download invoices in PDF.
+---
 
-Roadmap
-v1.1 (Next) → Add Login & Tenant Authentication
+## 📈 Roadmap
 
-v2.0 → Online multi-tenant deployment with automated onboarding.
+* **v1.1** → User authentication & role-based access
+* **v2.0** → Full online multi-tenant SaaS deployment
+* **v2.1** → Client onboarding + billing system
 
-Contributors
-Kwetu Partners Ltd – Lead development
+---
 
-Special Thanks – Early testers and client partners
+## 👤 Author
 
-License
-This project is licensed under the MIT License – free to modify and distribute.
+**Bundi Murithi**
+Founder & Software Engineer
+Kwetu Partners Ltd
 
-Powered by
-Kwetu Partners Ltd | www.kwetupartners.net
+---
+
+## 📄 License
+
+MIT License — Free to use, modify, and distribute.
+
+---
+
+## 🌐 Powered by
+
+Kwetu Partners Ltd
+https://kwetupartners.net/
+
 
