@@ -197,6 +197,7 @@
   {% endwith %}
 
   <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <label for="product_id">Select Product</label>
     <select name="product_id" id="product_id" required>
       {% for product in products %}

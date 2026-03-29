@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login - {{ tenant | capitalize }} | Inventa™</title>
+  <title>Login - {{ tenant | capitalize }} | Inventa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
     body {
@@ -17,7 +17,7 @@
       margin: 80px auto;
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
 
@@ -48,6 +48,7 @@
       margin-top: 5px;
       border-radius: 5px;
       border: 1px solid #ccc;
+      box-sizing: border-box;
     }
 
     button {
@@ -94,7 +95,7 @@
 <body>
 
 <div class="container">
-  <h2>Login to Inventa™</h2>
+  <h2>Login to Inventa</h2>
 
   {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -108,16 +109,17 @@
 
   <form method="POST">
     <label for="username">Username</label>
-    <input type="text" name="username" required>
+    <input type="text" id="username" name="username" required>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <label for="password">Password</label>
-    <input type="password" name="password" required>
+    <input type="password" id="password" name="password" required>
 
     <button type="submit">Login</button>
   </form>
 
   <div class="links">
-    <a href="/change-password">Change Password</a>
+    <a href="{{ url_for('change_password_redirect') }}">Change Password</a>
   </div>
 </div>
 

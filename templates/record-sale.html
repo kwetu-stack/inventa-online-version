@@ -166,7 +166,8 @@
 
   <div class="container">
     <h2>Record New Sale</h2>
-    <form method="POST">
+    <form method="POST" autocomplete="off">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <label for="customer">Customer Name:</label>
       <input type="text" id="customer" name="customer" required>
 
